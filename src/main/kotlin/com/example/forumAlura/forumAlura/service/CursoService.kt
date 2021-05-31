@@ -18,4 +18,13 @@ class CursoService(
         return cursoRepository.save(curso)
     }
 
+    fun procurarCursoPorId(id: Long): Curso {
+       return cursoRepository.findById(id).orElseThrow { RuntimeException("Curso não encontrado") }
+    }
+
+    fun procuraCursoPorNome(nomeCurso: String): Curso {
+        return cursoRepository.findByNome(nomeCurso)
+    }
+
+
 }
