@@ -6,13 +6,19 @@ import com.example.forumAlura.forumAlura.repository.CursoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
 class CursoService(
     private val cursoRepository: CursoRepository
 ) {
 
+    @Transactional
     fun criandoUmCurso(cursoRequestAndResponse: CursoRequestAndResponse): Curso {
+        val procuraCursoPorNome = procuraCursoPorNome(cursoRequestAndResponse.nome)
+        if (cursoRequestAndResponse.nome == procuraCursoPorNome.nome) {
+            throw RuntimeException("Esse curso já existe")
+        }
         val curso = Curso(
             nome = cursoRequestAndResponse.nome,
             categoria = cursoRequestAndResponse.categoria
@@ -32,5 +38,9 @@ class CursoService(
         return cursoRepository.findAll(pageable)
     }
 
+    fun delete(id: Long): Any? {
+        val findById = cursoRepository.findById(id).orElseThrow { RuntimeException("Esse curso não existe") }
+        return cursoRepository.delete(findById)
+    }
 
 }

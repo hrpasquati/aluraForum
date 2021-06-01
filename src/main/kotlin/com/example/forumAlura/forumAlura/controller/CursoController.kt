@@ -12,14 +12,13 @@ import org.springframework.web.util.UriComponentsBuilder
 import javax.transaction.Transactional
 
 @RestController
-@RequestMapping("/curso")
+@RequestMapping("/cursos")
 class CursoController(
     private val cursoService: CursoService
 ) {
 
     @PostMapping
-    @Transactional
-    fun crete(
+    fun create(
         @RequestBody cursoRequestAndResponse: CursoRequestAndResponse,
         uriComponentsBuilder: UriComponentsBuilder
     ): ResponseEntity<CursoRequestAndResponse> {
@@ -41,6 +40,11 @@ class CursoController(
     @GetMapping("/nomeCurso/{nomeCurso}")
     fun procuraCursoPorNome(@PathVariable nomeCurso: String): ResponseEntity<Curso> {
         return ResponseEntity.ok(cursoService.procuraCursoPorNome(nomeCurso))
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun deletarUmCurso(@PathVariable() id: Long): ResponseEntity<Any> {
+        return ResponseEntity.ok(cursoService.delete(id))
     }
 
 }
