@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository
 interface CursoRepository : JpaRepository<Curso, Long> {
 
     @Query("SELECT c FROM Curso c WHERE c.nome = :nome")
-    fun findByNome(@Param("nome") nomeCurso: String): Curso
+    fun findByNome(@Param("nome") nomeCurso: String): Curso?
 
 }

@@ -1,6 +1,7 @@
 package com.example.forumAlura.forumAlura.service
 
 import com.example.forumAlura.forumAlura.dto.request.CursoRequestAndResponse
+import com.example.forumAlura.forumAlura.exception.FindByCursoException
 import com.example.forumAlura.forumAlura.model.Curso
 import com.example.forumAlura.forumAlura.repository.CursoRepository
 import org.springframework.data.domain.Page
@@ -15,10 +16,6 @@ class CursoService(
 
     @Transactional
     fun criandoUmCurso(cursoRequestAndResponse: CursoRequestAndResponse): Curso {
-        val procuraCursoPorNome = procuraCursoPorNome(cursoRequestAndResponse.nome)
-        if (cursoRequestAndResponse.nome == procuraCursoPorNome.nome) {
-            throw RuntimeException("Esse curso já existe")
-        }
         val curso = Curso(
             nome = cursoRequestAndResponse.nome,
             categoria = cursoRequestAndResponse.categoria
@@ -27,11 +24,11 @@ class CursoService(
     }
 
     fun procurarCursoPorId(id: Long): Curso {
-       return cursoRepository.findById(id).orElseThrow { RuntimeException("Curso não encontrado") }
+       return cursoRepository.findById(id).orElseThrow { FindByCursoException("Curso não encontrado") }
     }
 
     fun procuraCursoPorNome(nomeCurso: String): Curso {
-        return cursoRepository.findByNome(nomeCurso)
+        return cursoRepository.findByNome(nomeCurso) ?: throw FindByCursoException("Curso nao encontrado")
     }
 
     fun procuraTodosOsCursos(pageable: Pageable): Page<Curso> {
@@ -39,8 +36,7 @@ class CursoService(
     }
 
     fun delete(id: Long): Any? {
-        val findById = cursoRepository.findById(id).orElseThrow { RuntimeException("Esse curso não existe") }
+        val findById = cursoRepository.findById(id).orElseThrow { FindByCursoException("Esse curso não existe") }
         return cursoRepository.delete(findById)
     }
-
 }
