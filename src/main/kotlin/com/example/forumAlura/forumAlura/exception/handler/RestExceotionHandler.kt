@@ -1,7 +1,8 @@
 package com.example.forumAlura.forumAlura.exception.handler
 
 import com.example.forumAlura.forumAlura.exception.BadRequestExcepetionDetail
-import com.example.forumAlura.forumAlura.exception.FindByCursoException
+import com.example.forumAlura.forumAlura.exception.CursoJaExisteException
+import com.example.forumAlura.forumAlura.exception.CursoNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -12,7 +13,8 @@ import java.time.LocalDateTime
 class RestExceotionHandler {
 
     @ExceptionHandler(
-        FindByCursoException::class)
+        CursoJaExisteException::class
+        )
     fun handlerBadRequest(runtimeException: RuntimeException) : ResponseEntity<BadRequestExcepetionDetail> {
         return ResponseEntity(
             BadRequestExcepetionDetail(
@@ -21,6 +23,17 @@ class RestExceotionHandler {
                 mensagem = runtimeException.message ?: "Não veio mensagem",
                 timesTamp = LocalDateTime.now()
         ), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(CursoNotFoundException::class)
+    fun handlerNotFound(cursoNotFoundException: CursoNotFoundException): ResponseEntity<BadRequestExcepetionDetail> {
+        return ResponseEntity(
+            BadRequestExcepetionDetail(
+                titulo = "NOT FOUND Exception",
+                status = HttpStatus.NOT_FOUND.value(),
+                mensagem = cursoNotFoundException.message ?: "Não veio a mensagem",
+                timesTamp = LocalDateTime.now()
+            ), HttpStatus.NOT_FOUND        )
     }
 
 }

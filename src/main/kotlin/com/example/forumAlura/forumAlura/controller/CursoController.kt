@@ -3,6 +3,7 @@ package com.example.forumAlura.forumAlura.controller
 import com.example.forumAlura.forumAlura.dto.request.CursoRequestAndResponse
 import com.example.forumAlura.forumAlura.model.Curso
 import com.example.forumAlura.forumAlura.service.CursoService
+import org.apache.coyote.Response
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -46,4 +47,8 @@ class CursoController(
         return ResponseEntity.ok(cursoService.delete(id))
     }
 
+    @PutMapping("/{id}")
+    fun atualizar(@PathVariable id: Long, @RequestBody cursoRequestAndResponse: CursoRequestAndResponse): ResponseEntity<Curso> {
+        return ResponseEntity.ok(cursoService.atualizar(id, cursoRequestAndResponse))
+    }
 }

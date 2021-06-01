@@ -1,7 +1,8 @@
 package com.example.forumAlura.forumAlura.service
 
 import com.example.forumAlura.forumAlura.dto.request.CursoRequestAndResponse
-import com.example.forumAlura.forumAlura.exception.FindByCursoException
+import com.example.forumAlura.forumAlura.exception.CursoJaExisteException
+import com.example.forumAlura.forumAlura.exception.CursoNotFoundException
 import com.example.forumAlura.forumAlura.model.Curso
 import com.example.forumAlura.forumAlura.repository.CursoRepository
 import org.springframework.data.domain.Page
@@ -16,6 +17,10 @@ class CursoService(
 
     @Transactional
     fun criandoUmCurso(cursoRequestAndResponse: CursoRequestAndResponse): Curso {
+        val procuraCursoPorNome = cursoRepository.findByNome(cursoRequestAndResponse.nome)
+        if (procuraCursoPorNome != null && procuraCursoPorNome.nome == cursoRequestAndResponse.nome) {
+            throw CursoJaExisteException("JÁ TEM UM CURSO COM ESSE NOME")
+        }
         val curso = Curso(
             nome = cursoRequestAndResponse.nome,
             categoria = cursoRequestAndResponse.categoria
@@ -24,11 +29,11 @@ class CursoService(
     }
 
     fun procurarCursoPorId(id: Long): Curso {
-       return cursoRepository.findById(id).orElseThrow { FindByCursoException("Curso não encontrado") }
+        return cursoRepository.findById(id).orElseThrow { CursoNotFoundException("Curso não encontrado") }
     }
 
     fun procuraCursoPorNome(nomeCurso: String): Curso {
-        return cursoRepository.findByNome(nomeCurso) ?: throw FindByCursoException("Curso nao encontrado")
+        return cursoRepository.findByNome(nomeCurso) ?: throw CursoNotFoundException("Curso nao encontrado")
     }
 
     fun procuraTodosOsCursos(pageable: Pageable): Page<Curso> {
@@ -36,7 +41,21 @@ class CursoService(
     }
 
     fun delete(id: Long): Any? {
-        val findById = cursoRepository.findById(id).orElseThrow { FindByCursoException("Esse curso não existe") }
+        val findById = cursoRepository.findById(id).orElseThrow { CursoNotFoundException("Esse curso não existe") }
         return cursoRepository.delete(findById)
+    }
+
+
+    @Transactional
+    fun atualizar(id: Long, cursoRequestAndResponse: CursoRequestAndResponse): Curso {
+        val cursoBancoDeDados = procurarCursoPorId(id)
+         cursoBancoDeDados.copy(
+            nome = cursoRequestAndResponse.nome,
+            categoria = cursoRequestAndResponse.categoria
+        )
+
+        cursoRepository.save(cursoBancoDeDados)
+
+        return cursoBancoDeDados
     }
 }
