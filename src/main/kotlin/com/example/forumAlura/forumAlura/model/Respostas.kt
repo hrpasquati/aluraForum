@@ -9,7 +9,7 @@ data class Respostas(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    val mensagem: String,
+    var mensagem: String,
 
     @ManyToOne
     val topico: Topico,

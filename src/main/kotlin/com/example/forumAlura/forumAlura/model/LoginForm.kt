@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull
 
 data class LoginForm(
 
-    @NotNull @NotEmpty
+    @field:NotNull @field:NotEmpty
     val email: String,
-    @NotNull @NotEmpty
+    @field:NotNull @field:NotEmpty
     val senha: String
 )

@@ -29,14 +29,15 @@ class RestExceotionHandler {
         CursoNotFoundException::class,
         UserNotFoundException::class,
         TopicoNotFoundException::class,
-        UsuarioNotFoundException::class
+        UsuarioNotFoundException::class,
+        RespostaNotFoundException::class
     )
-    fun handlerNotFound(cursoNotFoundException: CursoNotFoundException): ResponseEntity<BadRequestExcepetionDetail> {
+    fun handlerNotFound(runtimeException: RuntimeException): ResponseEntity<BadRequestExcepetionDetail> {
         return ResponseEntity(
             BadRequestExcepetionDetail(
                 titulo = "NOT FOUND Exception",
                 status = HttpStatus.NOT_FOUND.value(),
-                mensagem = cursoNotFoundException.message ?: "Não veio a mensagem",
+                mensagem = runtimeException.message ?: "Não veio a mensagem",
                 timesTamp = LocalDateTime.now()
             ), HttpStatus.NOT_FOUND
         )
