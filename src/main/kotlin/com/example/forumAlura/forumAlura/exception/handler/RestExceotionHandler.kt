@@ -1,9 +1,6 @@
 package com.example.forumAlura.forumAlura.exception.handler
 
-import com.example.forumAlura.forumAlura.exception.BadRequestExcepetionDetail
-import com.example.forumAlura.forumAlura.exception.CursoJaExisteException
-import com.example.forumAlura.forumAlura.exception.CursoNotFoundException
-import com.example.forumAlura.forumAlura.exception.UserNotFoundException
+import com.example.forumAlura.forumAlura.exception.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -14,7 +11,8 @@ import java.time.LocalDateTime
 class RestExceotionHandler {
 
     @ExceptionHandler(
-        CursoJaExisteException::class
+        CursoJaExisteException::class,
+        TopicoJaxisteException::class
     )
     fun handlerBadRequest(runtimeException: RuntimeException): ResponseEntity<BadRequestExcepetionDetail> {
         return ResponseEntity(
@@ -29,7 +27,9 @@ class RestExceotionHandler {
 
     @ExceptionHandler(
         CursoNotFoundException::class,
-        UserNotFoundException::class
+        UserNotFoundException::class,
+        TopicoNotFoundException::class,
+        UsuarioNotFoundException::class
     )
     fun handlerNotFound(cursoNotFoundException: CursoNotFoundException): ResponseEntity<BadRequestExcepetionDetail> {
         return ResponseEntity(

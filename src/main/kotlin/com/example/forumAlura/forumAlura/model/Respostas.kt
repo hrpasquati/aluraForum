@@ -8,13 +8,13 @@ data class Respostas(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
     val mensagem: String,
 
     @ManyToOne
     val topico: Topico,
 
-    val dataCriacao: LocalDateTime,
+    val dataCriacao: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne
     val autor: Usuario,

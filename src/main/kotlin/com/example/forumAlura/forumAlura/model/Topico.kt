@@ -9,17 +9,17 @@ data class Topico(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
     val titulo: String,
-    val mensagem: String,
+    var mensagem: String,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
     @Enumerated(EnumType.STRING)
-    val status: StatusTopico = StatusTopico.NAO_RESPONDIDO,
+    var status: StatusTopico = StatusTopico.NAO_RESPONDIDO,
 
     @ManyToOne
-    val autor: Usuario,
+    var autor: Usuario,
     @ManyToOne
     val curso: Curso,
     @OneToMany(mappedBy = "topico")
-    val respostas: List<Respostas>
+    val respostas: List<Respostas> = ArrayList()
 )
