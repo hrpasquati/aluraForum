@@ -53,4 +53,9 @@ class RespotaService(
         resposta.mensagem = respostaRequest.mensagem
         return respostaRepository.save(resposta)
     }
+
+    fun delete(id: Long): Any {
+        val resposta = findRespostaById(id)
+        return respostaRepository.delete(resposta)
+    }
 }

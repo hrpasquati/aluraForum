@@ -24,17 +24,23 @@ class RespostaController(
         return ResponseEntity.ok(respostaService.create(respostaRequest, idUsuario, idTopico))
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     fun findRespostaById(@PathVariable id: Long): ResponseEntity<Respostas> {
         return ResponseEntity.ok(respostaService.findRespostaById(id))
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     fun atualizarResposta(
         @RequestBody @Valid respostaRequest: RespostaRequest,
         @PathVariable("id") id: Long
     ): ResponseEntity<Respostas> {
         return ResponseEntity.ok(respostaService.atualiza(respostaRequest, id))
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable("id") id: Long): ResponseEntity<Void>{
+        respostaService.delete(id)
+        return ResponseEntity.ok().build()
     }
 
 }
